@@ -27,7 +27,7 @@ jobs:
     - name: Build Worker
       run: docker build -t rasimthegrey/multi-worker ./worker
     - name: Log in to docker Hub
-      run: docker login -u ${{ DOCKER_HUB_ID }} -p ${{ DOCKER_HUB_PASSWORD }}
+      run: docker login -u ${{ secrets.DOCKER_HUB_ID }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
     - name: push images to docker hub
       run: docker push rasimthegrey/multi-client
     - name: push images to docker hub
