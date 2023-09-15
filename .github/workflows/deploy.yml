@@ -16,20 +16,13 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build the Docker image
       run: docker build --file ./client/Dockerfile.dev --tag rasimthegrey/react-test ./client
-      
-  run-test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Test the Image
-        run: docker run -e CI=true rasimthegrey/react-test npm test
-  create-prod:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Build Client
-        run: docker build -t rasimthegrey/multi-client ./client
-      - name: Build NGINX
-        run: docker build -t rasimthegrey/multi-nginx ./nginx
-      - name: Build Server
-        run: docker build -t rasimthegrey/multi-server ./server
-      - name: Build Worker
-        run: docker build -t rasimthegrey/multi-worker ./worker
+    - name: Test the Image
+      run: docker run -e CI=true rasimthegrey/react-test npm test
+    - name: Build Client
+      run: docker build -t rasimthegrey/multi-client ./client
+    - name: Build NGINX
+      run: docker build -t rasimthegrey/multi-nginx ./nginx
+    - name: Build Server
+      run: docker build -t rasimthegrey/multi-server ./server
+    - name: Build Worker
+      run: docker build -t rasimthegrey/multi-worker ./worker
