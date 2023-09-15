@@ -21,4 +21,4 @@ jobs:
           ssh-keyscan 16.171.133.100 >> ~/.ssh/known_hosts
 
       - name: Deploy with Docker Compose
-        run: docker-compose up --build
+        run: docker-compose up --build -d
