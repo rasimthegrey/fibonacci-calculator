@@ -18,6 +18,9 @@ jobs:
       run: docker build --file ./client/Dockerfile.dev --tag rasim99/react-test ./client
     - name: Test the Image
       run: docker run -e CI=true rasim99/react-test npm test
+
+
+      
     - name: Build Client
       run: docker build -t rasim99/multi-client ./client
     - name: Build NGINX
