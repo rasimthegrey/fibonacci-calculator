@@ -28,17 +28,17 @@ jobs:
           ECR_REPOSITORY: fibonacci-calculator
         run: |
           docker build -t multi-client ./client 
-          docker tag multi-client:latest $ECR_REGISTRY/$ECR_REPOSITORY:multi-client:latest
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:multi-client:latest
+          docker tag multi-client:latest $ECR_REGISTRY/$ECR_REPOSITORY:multi-client
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:multi-client
 
           docker build -t multi-nginx ./nginx 
-          docker tag multi-nginx:latest $ECR_REGISTRY/$ECR_REPOSITORY:multi-nginx:latest
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:multi-nginx:latest
+          docker tag multi-nginx:latest $ECR_REGISTRY/$ECR_REPOSITORY:multi-nginx
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:multi-nginx
 
           docker build -t multi-server ./server 
-          docker tag multi-server:latest $ECR_REGISTRY/$ECR_REPOSITORY:multi-server:latest
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:multi-server:latest
+          docker tag multi-server:latest $ECR_REGISTRY/$ECR_REPOSITORY:multi-server
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:multi-server
 
           docker build -t multi-worker ./worker 
-          docker tag multi-worker:latest $ECR_REGISTRY/$ECR_REPOSITORY:multi-worker:latest
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:multi-worker:latest
+          docker tag multi-worker:latest $ECR_REGISTRY/$ECR_REPOSITORY:multi-worker
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:multi-worker
