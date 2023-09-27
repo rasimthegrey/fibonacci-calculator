@@ -1,42 +1,41 @@
-name: Docker Image CI
+name: Build and Push to Amazon ECR
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches: [master]
 
 jobs:
-
-  build:
-
+  build-and-push:
+    name: Build and Push to ECR
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build --file ./client/Dockerfile.dev --tag rasim99/react-test ./client
-    - name: Test the Image
-      run: docker run -e CI=true rasim99/react-test npm test
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
-
-      
-    - name: Build Client
-      run: docker build -t rasim99/multi-client ./client
-    - name: Build NGINX
-      run: docker build -t rasim99/multi-nginx ./nginx
-    - name: Build Server
-      run: docker build -t rasim99/multi-server ./server
-    - name: Build Worker
-      run: docker build -t rasim99/multi-worker ./worker
-    - name: Log in to docker Hub
-      run: docker login -u ${{ secrets.DOCKER_HUB_ID }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
-    - name: push images to docker hub
-      run: docker push rasim99/multi-client
-    - name: push images to docker hub
-      run: docker push rasim99/multi-nginx
-    - name: push images to docker hub
-      run: docker push rasim99/multi-server
-    - name: push images to docker hub
-      run: docker push rasim99/multi-worker
-      
+      - name: Build, Tag and Push the Image to Amazon ECR
+        id: build-images
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: fibonacci-calculator
+        run: |
+          docker build multi-client ./client 
+          docker tag multi-client:latest $ECR_REGISTRY/$ECR_REPOSITORY/multi-client:latest
+          docker build multi-nginx ./nginx 
+          docker tag multi-nginx:latest $ECR_REGISTRY/$ECR_REPOSITORY/multi-nginx:latest
+          docker build multi-server ./server 
+          docker tag multi-server:latest $ECR_REGISTRY/$ECR_REPOSITORY/multi-server:latest
+          docker build multi-worker ./worker 
+          docker tag multi-worker:latest $ECR_REGISTRY/$ECR_REPOSITORY/multi-worker:latest
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY/multi-client:latest
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY/multi-nginx:latest
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY/multi-server:latest
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY/multi-worker:latest
