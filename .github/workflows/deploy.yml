@@ -27,14 +27,22 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: fibonacci-calculator
         run: |
+          cd client/
           docker build multi-client ./client 
           docker tag multi-client:latest $ECR_REGISTRY/$ECR_REPOSITORY/multi-client:latest
+          cd ..
+          cd nginx/
           docker build multi-nginx ./nginx 
           docker tag multi-nginx:latest $ECR_REGISTRY/$ECR_REPOSITORY/multi-nginx:latest
+          cd ..
+          cd server/
           docker build multi-server ./server 
           docker tag multi-server:latest $ECR_REGISTRY/$ECR_REPOSITORY/multi-server:latest
+          cd ..
+          cd worker/
           docker build multi-worker ./worker 
           docker tag multi-worker:latest $ECR_REGISTRY/$ECR_REPOSITORY/multi-worker:latest
+          cd ..
           docker push $ECR_REGISTRY/$ECR_REPOSITORY/multi-client:latest
           docker push $ECR_REGISTRY/$ECR_REPOSITORY/multi-nginx:latest
           docker push $ECR_REGISTRY/$ECR_REPOSITORY/multi-server:latest
